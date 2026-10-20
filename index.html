@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derkenar — Hayatın kenarına düşülen notlar.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --surface-color: #161920;
+            --border-color: #232733;
+            --text-primary: #e2e4ed;
+            --text-secondary: #9aa0ac;
+            --accent-color: #c5a880;
+            --accent-hover: #dfc39d;
+            --danger-color: #d9534f;
+            --danger-hover: #c9302c;
+            --success-color: #5cb85c;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* Header & Navigation */
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area h1 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        .logo-area p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+        }
+
+        .admin-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* Hero / Slogan Section */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Main Content Layout */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Feed / Articles */
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .article-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        .article-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .article-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .article-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            color: var(--text-primary);
+        }
+
+        .article-snippet {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .article-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Sidebar & Derkenar Notları */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .sidebar-box {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .sidebar-box h4 {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .note-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--border-color);
+            position: relative;
+        }
+
+        .note-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .note-text {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .note-author {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* Admin Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .modal-box h3 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        /* Admin Tab Menüsü */
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding-bottom: 0.3rem;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: #0f1115;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger-hover);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Yönetim Paneli İçerik Listesi (Silme/Yönetme) */
+        .manage-item {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .manage-info h5 {
+            font-size: 1rem;
+            font-family: var(--font-serif);
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .manage-info span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .manage-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        footer p {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-area">
+                <h1>DERKENAR</h1>
+                <p>Hayatın kenarına düşülen notlar.</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a class="active" onclick="filterCategory('tumu')">Tümü</a></li>
+                    <li><a onclick="filterCategory('deneme')">Denemeler</a></li>
+                    <li><a onclick="filterCategory('felsefe')">Felsefe</a></li>
+                    <li><a onclick="filterCategory('edebiyat')">Edebiyat</a></li>
+                    <li><a onclick="filterCategory('insan')">İnsan</a></li>
+                    <li><a onclick="filterCategory('kitaplik')">Kitaplık</a></li>
+                </ul>
+                <button class="admin-btn" onclick="openAdminModal()">Yönetim Paneli</button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>"Bazı düşünceler satır aralarında yaşar."</h2>
+        <p>Edebiyat, felsefe, psikoloji ve düşünce üzerine derinlikli bir dijital sığınak.</p>
+    </section>
+
+    <main class="main-container">
+        <!-- Main Feed -->
+        <section>
+            <h3 class="section-title" id="feed-title">Son Yazılar</h3>
+            <div id="articles-wrapper"></div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-box">
+                <h4>Derkenar Notları</h4>
+                <div id="notes-wrapper"></div>
+            </div>
+
+            <div class="sidebar-box">
+                <h4>Hakkında</h4>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                    Gündelik hayatın içinde gözden kaçan ayrıntıları, insanın iç dünyasını ve düşünsel çatışmalarını Camus, Nietzsche ve İbn Arabi izleğiyle ele alıyoruz.
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-box">
+            <h3 id="modal-title">Yönetici Girişi</h3>
+            
+            <!-- Şifre Ekranı -->
+            <div id="login-form-container">
+                <div class="form-group">
+                    <label>Yönetici Şifresi</label>
+                    <input type="password" id="adminPassword" placeholder="Şifrenizi girin...">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-secondary" onclick="closeAdminModal()">Kapat</button>
+                    <button class="btn-primary" onclick="checkPassword()">Giriş Yap</button>
+                </div>
+            </div>
+
+            <!-- Panel Paneli / Dashboard -->
+            <div id="dashboard-container" style="display: none;">
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="switchAdminTab('add')">Yeni İçerik Ekle</button>
+                    <button class="tab-btn" onclick="switchAdminTab('manage')">İçerikleri Yönet / Sil</button>
+                    <button class="tab-btn" onclick="switchAdminTab('trash')">Çöp Kutusu</button>
+                </div>
+
+                <!-- Tab 1: Yeni Ekle -->
+                <div id="tab-add" class="admin-tab-content">
+                    <div class="form-group">
+                        <label>İçerik Türü</label>
+                        <select id="contentType" onchange="toggleFormFields()">
+                            <option value="article">Makale / Yazı</option>
+                            <option value="note">Derkenar Notu (Kısa söz/alıntı)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="group-title">
+                        <label>Yazı Başlığı</label>
+                        <input type="text" id="newTitle" placeholder="Örn: Yalnızlık Üzerine...">
+                    </div>
+
+                    <div class="form-group" id="group-category">
+                        <label>Kategori</label>
+                        <select id="newCategory">
+                            <option value="deneme">Denemeler</option>
+                            <option value="felsefe">Felsefe</option>
+                            <option value="edebiyat">Edebiyat</option>
+                            <option value="insan">İnsan</option>
+                            <option value="kitaplik">Kitaplık</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="content-label">Yazı Özeti / İçeriği</label>
+                        <textarea id="newSnippet" placeholder="Metni buraya girin..."></textarea>
+                    </div>
+
+                    <div class="form-group" id="group-author" style="display: none;">
+                        <label>Yazar / Kaynak (Notlar için)</label>
+                        <input type="text" id="newAuthor" placeholder="Örn: Nietzsche veya Derkenar Notları">
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="closeAdminModal()">Kapat</button>
+                        <button class="btn-primary" onclick="addNewContent()">İçeriği Yayınla</button>
+                    </div>
+                </div>
+
+                <!-- Tab 2: İçerikleri Yönet / Sil -->
+                <div id="tab-manage" class="admin-tab-content" style="display: none;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Yayında olan yazı ve notları buradan silebilir (çöp kutusuna gönderebilirsin).</p>
+                    <div id="manage-articles-list"></div>
+                    <div id="manage-notes-list" style="margin-top: 1.5rem;"></div>
+                </div>
+
+                <!-- Tab 3: Çöp Kutusu -->
+                <div id="tab-trash" class="admin-tab-content" style="display: none;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Silinen içerikler burada saklanır. Dilersen geri yükleyebilir veya kalıcı olarak silebilirsin.</p>
+                    <div id="trash-list"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Bazı düşünceler satır aralarında yaşar.</p>
+        <small>© 2026 Derkenar. Tüm hakları saklıdır.</small>
+    </footer>
+
+    <script>
+        const defaultArticles = [
+            {
+                id: 1,
+                category: 'felsefe',
+                categoryName: 'Felsefe',
+                title: 'Camus ve Absürd: Anlamsızlığın Ortasında Direnmek',
+                snippet: 'Hayatın kendine atfedilmiş aşkın bir anlamı yoksa, insan bu boşlukta nasıl var olmaya devam edebilir?',
+                date: '13 Ekim 2026',
+                readTime: '4 dk okuma'
+            },
+            {
+                id: 2,
+                category: 'deneme',
+                categoryName: 'Denemeler',
+                title: 'Modern Yalnızlığın Mimarisi ve Sessizlik',
+                snippet: 'Kalabalık şehirlerin gürültüsü içinde kendi sesini yitiren insan, en çok da kendi içindeki ıssızlıktan korkuyor.',
+                date: '10 Ekim 2026',
+                readTime: '3 dk okuma'
+            }
+        ];
+
+        const defaultNotes = [
+            {
+                id: 101,
+                text: "İnsan, ne olduğunu bildiği sürece eksiktir; ne olabileceğini sezdiği an ise sınırsız bir uçurum.",
+                author: "Derkenar Notları"
+            },
+            {
+                id: 102,
+                text: "Yalnızlık, başkalarının yokluğu değil, insanın kendiyle dolup taşmasıdır.",
+                author: "Nietzsche esintisiyle"
+            }
+        ];
+
+        let articles = JSON.parse(localStorage.getItem('derkenar_articles')) || defaultArticles;
+        let notes = JSON.parse(localStorage.getItem('derkenar_notes')) || defaultNotes;
+        let trash = JSON.parse(localStorage.getItem('derkenar_trash')) || [];
+        let currentFilter = 'tumu';
+
+        function renderArticles(filter = 'tumu') {
+            const wrapper = document.getElementById('articles-wrapper');
+            wrapper.innerHTML = '';
+
+            const filtered = filter === 'tumu' 
+                ? articles 
+                : articles.filter(a => a.category === filter);
+
+            if(filtered.length === 0) {
+                wrapper.innerHTML = '<p style="color: var(--text-secondary); font-style: italic;">Bu kategoride henüz yazı bulunmuyor.</p>';
+                return;
+            }
+
+            filtered.forEach(article => {
+                const card = document.createElement('article');
+                card.className = 'article-card';
+                card.innerHTML = `
+                    <span class="article-category">${article.categoryName || 'Yazı'}</span>
+                    <h3><a href="#" style="color: inherit; text-decoration: none;">${article.title}</a></h3>
+                    <p class="article-snippet">${article.snippet}</p>
+                    <div class="article-meta">
+                        <span>${article.date}</span>
+                        <span>${article.readTime || '3 dk okuma'}</span>
+                    </div>
+                `;
+                wrapper.appendChild(card);
+            });
+        }
+
+        function renderNotes() {
+            const wrapper = document.getElementById('notes-wrapper');
+            wrapper.innerHTML = '';
+            notes.forEach(note => {
+                const div = document.createElement('div');
+                div.className = 'note-item';
+                div.innerHTML = `
+                    <p class="note-text">"${note.text}"</p>
+                    <p class="note-author">— ${note.author}</p>
+                `;
+                wrapper.appendChild(div);
+            });
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const titleEl = document.getElementById('feed-title');
+            if(category === 'tumu') {
+                titleEl.textContent = 'Son Yazılar';
+            } else {
+                titleEl.textContent = event.target.textContent;
+            }
+
+            renderArticles(category);
+        }
+
+        const ADMIN_PASS = "oktay.derkenar123";
+
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('dashboard-container').style.display = 'none';
+            document.getElementById('login-form-container').style.display = 'block';
+            document.getElementById('modal-title').textContent = 'Yönetici Girişi';
+            switchAdminTab('add');
+        }
+
+        function checkPassword() {
+            const pass = document.getElementById('adminPassword').value;
+            if(pass === ADMIN_PASS) {
+                document.getElementById('login-form-container').style.display = 'none';
+                document.getElementById('dashboard-container').style.display = 'block';
+                document.getElementById('modal-title').textContent = 'İçerik Yönetim Paneli';
+                renderManageLists();
+                renderTrashList();
+            } else {
+                alert('Hatalı şifre!');
+            }
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if(tabName === 'add') {
+                document.getElementById('tab-add').style.display = 'block';
+                event.target.classList.add('active');
+            } else if(tabName === 'manage') {
+                document.getElementById('tab-manage').style.display = 'block';
+                event.target.classList.add('active');
+                renderManageLists();
+            } else if(tabName === 'trash') {
+                document.getElementById('tab-trash').style.display = 'block';
+                event.target.classList.add('active');
+                renderTrashList();
+            }
+        }
+
+        function toggleFormFields() {
+            const type = document.getElementById('contentType').value;
+            if(type === 'note') {
+                document.getElementById('group-title').style.display = 'none';
+                document.getElementById('group-category').style.display = 'none';
+                document.getElementById('group-author').style.display = 'block';
+                document.getElementById('content-label').textContent = 'Not / Alıntı Metni';
+            } else {
+                document.getElementById('group-title').style.display = 'block';
+                document.getElementById('group-category').style.display = 'block';
+                document.getElementById('group-author').style.display = 'none';
+                document.getElementById('content-label').textContent = 'Yazı Özeti / İçeriği';
+            }
+        }
+
+        function addNewContent() {
+            const type = document.getElementById('contentType').value;
+            
+            if(type === 'article') {
+                const title = document.getElementById('newTitle').value;
+                const category = document.getElementById('newCategory').value;
+                const snippet = document.getElementById('newSnippet').value;
+
+                if(!title || !snippet) {
+                    alert('Lütfen başlık ve metin alanlarını doldurun.');
+                    return;
+                }
+
+                const categoryNames = {
+                    'deneme': 'Denemeler',
+                    'felsefe': 'Felsefe',
+                    'edebiyat': 'Edebiyat',
+                    'insan': 'İnsan',
+                    'kitaplik': 'Kitaplık'
+                };
+
+                const newArticle = {
+                    id: Date.now(),
+                    category: category,
+                    categoryName: categoryNames[category],
+                    title: title,
+                    snippet: snippet,
+                    date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
+                    readTime: '3 dk okuma'
+                };
+
+                articles.unshift(newArticle);
+                localStorage.setItem('derkenar_articles', JSON.stringify(articles));
+                renderArticles(currentFilter);
+
+            } else {
+                const text = document.getElementById('newSnippet').value;
+                const author = document.getElementById('newAuthor').value || 'Derkenar Notları';
+
+                if(!text) {
+                    alert('Lütfen not metnini girin.');
+                    return;
+                }
+
+                const newNote = {
+                    id: Date.now(),
+                    text: text,
+                    author: author
+                };
+
+                notes.unshift(newNote);
+                localStorage.setItem('derkenar_notes', JSON.stringify(notes));
+                renderNotes();
+            }
+
+            alert('İçerik başarıyla eklendi!');
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newSnippet').value = '';
+            document.getElementById('newAuthor').value = '';
+        }
+
+        // Yönetim & Silme Fonksiyonları
+        function renderManageLists() {
+            const articlesListEl = document.getElementById('manage-articles-list');
+            const notesListEl = document.getElementById('manage-notes-list');
+
+            articlesListEl.innerHTML = '<h5 style="color: var(--accent-color); margin-bottom: 0.5rem; font-family: var(--font-serif);">Makaleler</h5>';
+            if(articles.length === 0) {
+                articlesListEl.innerHTML += '<p style="font-size: 0.8rem; color: var(--text-secondary);">Kayıtlı makale yok.</p>';
+            } else {
+                articles.forEach(art => {
+                    articlesListEl.innerHTML += `
+                        <div class="manage-item">
+                            <div class="manage-info">
+                                <h5>${art.title}</h5>
+                                <span>${art.categoryName} • ${art.date}</span>
+                            </div>
+                            <div class="manage-actions">
+                                <button class="btn-danger" onclick="moveToTrash('article', ${art.id})">Sil</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            notesListEl.innerHTML = '<h5 style="color: var(--accent-color); margin-bottom: 0.5rem; font-family: var(--font-serif);">Derkenar Notları</h5>';
+            if(notes.length === 0) {
+                notesListEl.innerHTML += '<p style="font-size: 0.8rem; color: var(--text-secondary);">Kayıtlı not yok.</p>';
+            } else {
+                notes.forEach(note => {
+                    notesListEl.innerHTML += `
+                        <div class="manage-item">
+                            <div class="manage-info">
+                                <h5>"${note.text.substring(0, 40)}..."</h5>
+                                <span>— ${note.author}</span>
+                            </div>
+                            <div class="manage-actions">
+                                <button class="btn-danger" onclick="moveToTrash('note', ${note.id})">Sil</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function moveToTrash(type, id) {
+            if(type === 'article') {
+                const index = articles.findIndex(a => a.id === id);
+                if(index !== -1) {
+                    const item = articles.splice(index, 1)[0];
+                    item.trashType = 'article';
+                    trash.push(item);
+                    localStorage.setItem('derkenar_articles', JSON.stringify(articles));
+                }
+            } else {
+                const index = notes.findIndex(n => n.id === id);
+                if(index !== -1) {
+                    const item = notes.splice(index, 1)[0];
+                    item.trashType = 'note';
+                    trash.push(item);
+                    localStorage.setItem('derkenar_notes', JSON.stringify(notes));
+                }
+            }
+            localStorage.setItem('derkenar_trash', JSON.stringify(trash));
+            renderArticles(currentFilter);
+            renderNotes();
+            renderManageLists();
+            renderTrashList();
+        }
+
+        function renderTrashList() {
+            const trashEl = document.getElementById('trash-list');
+            trashEl.innerHTML = '';
+
+            if(trash.length === 0) {
+                trashEl.innerHTML = '<p style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">Çöp kutusu boş.</p>';
+                return;
+            }
+
+            trash.forEach((item, index) => {
+                const titleText = item.trashType === 'article' ? item.title : `"${item.text.substring(0, 40)}..."`;
+                trashEl.innerHTML += `
+                    <div class="manage-item">
+                        <div class="manage-info">
+                            <h5>${titleText}</h5>
+                            <span>Tür: ${item.trashType === 'article' ? 'Makale' : 'Not'}</span>
+                        </div>
+                        <div class="manage-actions">
+                            <button class="btn-success" onclick="restoreFromTrash(${index})">Geri Yükle</button>
+                            <button class="btn-danger" onclick="deleteForever(${index})">Kalıcı Sil</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function restoreFromTrash(index) {
+            const item = trash.splice(index, 1)[0];
+            if(item.trashType === 'article') {
+                delete item.trashType;
+                articles.unshift(item);
+                localStorage.setItem('derkenar_articles', JSON.stringify(articles));
+                renderArticles(currentFilter);
+            } else {
+                delete item.trashType;
+                notes.unshift(item);
+                localStorage.setItem('derkenar_notes', JSON.stringify(notes));
+                renderNotes();
+            }
+            localStorage.setItem('derkenar_trash', JSON.stringify(trash));
+            renderManageLists();
+            renderTrashList();
+        }
+
+        function deleteForever(index) {
+            if(confirm('Bu içeriği kalıcı olarak silmek istediğinize emin misiniz?')) {
+                trash.splice(index, 1);
+                localStorage.setItem('derkenar_trash', JSON.stringify(trash));
+                renderTrashList();
+            }
+        }
+
+        renderArticles();
+        renderNotes();
+    </script>
+</body>
+</html>
